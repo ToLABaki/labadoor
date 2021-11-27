@@ -1,0 +1,12 @@
+[package]
+name = "labadoor-matrix"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+
+[dependencies]
+matrix-sdk = { version = "0.4.1", features = ["encryption"] }
+tokio = { version = "1.12.0", features = ["rt-multi-thread", "macros"] }
+
+[target.armv7-unknown-linux-musleabihf.dependencies]
+openssl-sys = { version = "0.9.67", features = ["vendored"] }
