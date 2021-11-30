@@ -3,4 +3,5 @@ members = [
     "labadoor-matrix",
     "labadoor-gpio",
     "labadoor-telegram",
+    "labadoor-csv",
 ]
