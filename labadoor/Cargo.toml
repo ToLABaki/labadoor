@@ -1,0 +1,11 @@
+[package]
+name = "labadoor"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.3.10", features = ["derive"] }
+labadoor-telegram = { path = "../labadoor-telegram" }
+labadoor-matrix = { path = "../labadoor-matrix" }
+labadoor-csv = { path = "../labadoor-csv" }
+labadoor-gpio = { path = "../labadoor-gpio" }

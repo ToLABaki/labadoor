@@ -43,7 +43,7 @@ async fn answer(
 }
 
 #[tokio::main]
-async fn main() {
+pub async fn main() {
     teloxide::enable_logging!();
     log::info!("Starting labadoor Telegram bot...");
     let token = std::env::var("TELEGRAM_TOKEN").expect("TELEGRAM_TOKEN not set");

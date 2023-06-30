@@ -1,6 +1,6 @@
 use gpio_cdev::{Chip, LineRequestFlags};
 
-fn main() {
+pub fn main() {
     let mut chip = Chip::new("/dev/gpiochip0").unwrap();
     let handle = chip
         .get_line(6)
