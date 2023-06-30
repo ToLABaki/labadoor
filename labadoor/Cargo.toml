@@ -13,7 +13,7 @@ serde = { version = "1.0.164", features = ["derive"] }
 config = "0.13.3"
 
 [features]
-telegram = [ "dep:labadoor-telegram" ]
-matrix = [ "dep:labadoor-matrix" ]
-csv = [ "dep:labadoor-csv" ]
-gpio = [ "dep:labadoor-gpio" ]
+telegram = ["dep:labadoor-telegram"]
+matrix = ["dep:labadoor-matrix"]
+csv = ["dep:labadoor-csv"]
+gpio = ["dep:labadoor-gpio"]
