@@ -5,7 +5,13 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.3.10", features = ["derive"] }
-labadoor-telegram = { path = "../labadoor-telegram" }
-labadoor-matrix = { path = "../labadoor-matrix" }
-labadoor-csv = { path = "../labadoor-csv" }
-labadoor-gpio = { path = "../labadoor-gpio" }
+labadoor-telegram = { path = "../labadoor-telegram", optional = true }
+labadoor-matrix = { path = "../labadoor-matrix", optional = true }
+labadoor-csv = { path = "../labadoor-csv", optional = true }
+labadoor-gpio = { path = "../labadoor-gpio", optional = true }
+
+[features]
+telegram = [ "dep:labadoor-telegram" ]
+matrix = [ "dep:labadoor-matrix" ]
+csv = [ "dep:labadoor-csv" ]
+gpio = [ "dep:labadoor-gpio" ]
