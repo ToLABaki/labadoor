@@ -30,10 +30,7 @@ async fn on_room_message(event: SyncMessageEvent<MessageEventContent>, room: Roo
 }
 
 #[tokio::main]
-pub async fn main() -> Result<()> {
-    let username = std::env::var("LABADOOR_MATRIX_USERNAME").expect("LABADOOR_MATRIX_USERNAME not set");
-    let password = std::env::var("LABADOOR_MATRIX_PASSWORD").expect("LABADOOR_MATRIX_PASSWORD not set");
-
+pub async fn main(username: String, password: String) -> Result<()> {
     let user = UserId::try_from(username)?;
     let client = Client::new_from_user_id(user.clone()).await?;
 
