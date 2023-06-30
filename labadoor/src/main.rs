@@ -1,40 +1,22 @@
-use clap::Parser;
-
-#[derive(Parser, Debug)]
-struct Cli {
-    #[command(subcommand)]
-    command: Command,
-}
-
-#[derive(Parser, Debug)]
-enum Command {
-    #[cfg(feature = "telegram")]
-    Telegram,
-    #[cfg(feature = "matrix")]
-    Matrix,
-    #[cfg(feature = "csv")]
-    CSV,
-    #[cfg(feature = "gpio")]
-    GPIO,
-}
+mod cli;
 
 fn main() {
-    let cli = Cli::parse();
+    let cli = cli::parse();
     match &cli.command {
         #[cfg(feature = "telegram")]
-        Command::Telegram => {
+        cli::Command::Telegram(_) => {
             labadoor_telegram::main();
         }
         #[cfg(feature = "matrix")]
-        Command::Matrix => {
+        cli::Command::Matrix(_) => {
             labadoor_matrix::main();
         }
         #[cfg(feature = "csv")]
-        Command::CSV => {
+        cli::Command::CSV => {
             labadoor_csv::main();
         }
         #[cfg(feature = "gpio")]
-        Command::GPIO => {
+        cli::Command::GPIO => {
             labadoor_gpio::main();
         }
     }
