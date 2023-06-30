@@ -9,6 +9,8 @@ labadoor-telegram = { path = "../labadoor-telegram", optional = true }
 labadoor-matrix = { path = "../labadoor-matrix", optional = true }
 labadoor-csv = { path = "../labadoor-csv", optional = true }
 labadoor-gpio = { path = "../labadoor-gpio", optional = true }
+serde = { version = "1.0.164", features = ["derive"] }
+config = "0.13.3"
 
 [features]
 telegram = [ "dep:labadoor-telegram" ]

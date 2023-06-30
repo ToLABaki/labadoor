@@ -1,4 +1,5 @@
 use clap::Parser;
+use serde::Deserialize;
 
 #[derive(Parser, Debug)]
 pub struct Cli {
@@ -19,14 +20,14 @@ pub enum Command {
 }
 
 #[cfg(feature = "telegram")]
-#[derive(Parser, Debug)]
+#[derive(Deserialize, Parser, Debug)]
 pub struct Telegram {
     #[clap(short, long)]
     pub token: Option<String>,
 }
 
 #[cfg(feature = "matrix")]
-#[derive(Parser, Debug)]
+#[derive(Deserialize, Parser, Debug)]
 pub struct Matrix {
     #[clap(short, long)]
     pub username: Option<String>,
