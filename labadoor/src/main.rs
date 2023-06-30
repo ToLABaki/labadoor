@@ -23,8 +23,14 @@ fn main() {
             labadoor_csv::csv();
         }
         #[cfg(feature = "gpio")]
-        cli::Command::GPIO => {
-            labadoor_gpio::gpio();
+        cli::Command::GPIO(_) => {
+            let gpio = config.get::<cli::GPIO>("gpio").unwrap();
+            labadoor_gpio::gpio(
+                gpio.device.unwrap(),
+                gpio.pin.unwrap(),
+                gpio.active_low.unwrap(),
+                gpio.active_time.unwrap(),
+            );
         }
     }
 }

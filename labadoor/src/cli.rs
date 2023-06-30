@@ -16,7 +16,7 @@ pub enum Command {
     #[cfg(feature = "csv")]
     CSV,
     #[cfg(feature = "gpio")]
-    GPIO,
+    GPIO(GPIO),
 }
 
 #[cfg(feature = "telegram")]
@@ -33,6 +33,19 @@ pub struct Matrix {
     pub username: Option<String>,
     #[clap(short, long)]
     pub password: Option<String>,
+}
+
+#[cfg(feature = "gpio")]
+#[derive(Deserialize, Parser, Debug)]
+pub struct GPIO {
+    #[clap(short, long)]
+    pub device: Option<String>,
+    #[clap(short, long)]
+    pub pin: Option<u8>,
+    #[clap(short, long)]
+    pub active_low: Option<bool>,
+    #[clap(short = 't', long)]
+    pub active_time: Option<u32>,
 }
 
 pub fn parse() -> Cli {
