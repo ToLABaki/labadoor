@@ -43,10 +43,9 @@ async fn answer(
 }
 
 #[tokio::main]
-pub async fn main() {
+pub async fn main(token: String) {
     teloxide::enable_logging!();
     log::info!("Starting labadoor Telegram bot...");
-    let token = std::env::var("TELEGRAM_TOKEN").expect("TELEGRAM_TOKEN not set");
     let bot = Bot::new(token).auto_send();
     let bot_name: String = "Labadoor Telegram bot".to_string();
     teloxide::commands_repl(bot, bot_name, answer).await;
