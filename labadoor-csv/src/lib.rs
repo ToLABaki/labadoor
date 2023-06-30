@@ -62,7 +62,7 @@ fn auth_user(username: String, resource: String) -> Result<(), ()> {
     return ret;
 }
 
-pub fn main() {
+pub fn csv() {
     let args: Vec<String> = std::env::args().collect();
     let method = String::from(&args[1]);
     let identifier = String::from(&args[2]);

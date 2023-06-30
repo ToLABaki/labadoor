@@ -30,7 +30,7 @@ async fn on_room_message(event: SyncMessageEvent<MessageEventContent>, room: Roo
 }
 
 #[tokio::main]
-pub async fn main(username: String, password: String) -> Result<()> {
+pub async fn matrix(username: String, password: String) -> Result<()> {
     let user = UserId::try_from(username)?;
     let client = Client::new_from_user_id(user.clone()).await?;
 

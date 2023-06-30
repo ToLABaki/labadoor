@@ -43,7 +43,7 @@ async fn answer(
 }
 
 #[tokio::main]
-pub async fn main(token: String) {
+pub async fn telegram(token: String) {
     teloxide::enable_logging!();
     log::info!("Starting labadoor Telegram bot...");
     let bot = Bot::new(token).auto_send();

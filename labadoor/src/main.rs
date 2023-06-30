@@ -5,19 +5,19 @@ fn main() {
     match &cli.command {
         #[cfg(feature = "telegram")]
         cli::Command::Telegram(_) => {
-            labadoor_telegram::main();
+            labadoor_telegram::telegram();
         }
         #[cfg(feature = "matrix")]
         cli::Command::Matrix(_) => {
-            labadoor_matrix::main();
+            labadoor_matrix::matrix();
         }
         #[cfg(feature = "csv")]
         cli::Command::CSV => {
-            labadoor_csv::main();
+            labadoor_csv::csv();
         }
         #[cfg(feature = "gpio")]
         cli::Command::GPIO => {
-            labadoor_gpio::main();
+            labadoor_gpio::gpio();
         }
     }
 }
