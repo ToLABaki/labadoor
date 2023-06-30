@@ -1,6 +1,6 @@
 use std::convert::TryFrom;
 use matrix_sdk::{
-    Client, SyncSettings, Result,
+    Client, SyncSettings,
     ruma::{UserId, events::{SyncMessageEvent, room::message::{MessageEventContent, MessageType,  TextMessageEventContent,}}},
     room::Room,
 };
@@ -30,15 +30,13 @@ async fn on_room_message(event: SyncMessageEvent<MessageEventContent>, room: Roo
 }
 
 #[tokio::main]
-pub async fn matrix(username: String, password: String) -> Result<()> {
-    let user = UserId::try_from(username)?;
-    let client = Client::new_from_user_id(user.clone()).await?;
+pub async fn matrix(username: String, password: String) {
+    let user = UserId::try_from(username).unwrap();
+    let client = Client::new_from_user_id(user.clone()).await.unwrap();
 
-    client.login(user.localpart(), &password, None, None).await?;
+    client.login(user.localpart(), &password, None, None).await.unwrap();
     client.sync_once(SyncSettings::default()).await.unwrap();
     client.register_event_handler(on_room_message).await;
     let settings = SyncSettings::default().token(client.sync_token().await.unwrap());
     client.sync(settings).await;
-
-    Ok(())
 }
