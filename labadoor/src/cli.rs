@@ -58,8 +58,10 @@ pub struct GPIO {
     #[clap(short, long)]
     pub pin: Option<u8>,
     #[clap(short, long)]
+    #[arg(default_value = "Some(false)")]
     pub active_low: Option<bool>,
     #[clap(short = 't', long)]
+    #[arg(default_value = "Some(2000)")]
     pub active_time: Option<u32>,
 }
 
