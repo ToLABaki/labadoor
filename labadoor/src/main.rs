@@ -19,8 +19,14 @@ fn main() {
             labadoor_matrix::matrix(matrix.username.unwrap(), matrix.password.unwrap());
         }
         #[cfg(feature = "csv")]
-        cli::Command::CSV => {
-            labadoor_csv::csv();
+        cli::Command::CSV(_) => {
+            let csv = config.get::<cli::CSV>("csv").unwrap();
+            labadoor_csv::csv(
+                csv.path.unwrap(),
+                csv.method.unwrap(),
+                csv.identifier.unwrap(),
+                csv.resource_shortcut.unwrap(),
+            );
         }
         #[cfg(feature = "gpio")]
         cli::Command::GPIO(_) => {

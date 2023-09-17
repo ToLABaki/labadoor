@@ -62,11 +62,7 @@ fn auth_user(username: String, resource: String) -> Result<(), ()> {
     return ret;
 }
 
-pub fn csv() {
-    let args: Vec<String> = std::env::args().collect();
-    let method = String::from(&args[1]);
-    let identifier = String::from(&args[2]);
-    let resource_shortcut = args[3].parse::<i8>().unwrap();
+pub fn csv(path: String, method: String, identifier: String, resource_shortcut: i8) {
 
     if let Ok(username) = get_username(method, identifier) {
         if let Ok(resource_name) = get_resource_name(username.clone(), resource_shortcut) {

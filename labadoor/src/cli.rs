@@ -14,7 +14,7 @@ pub enum Command {
     #[cfg(feature = "matrix")]
     Matrix(Matrix),
     #[cfg(feature = "csv")]
-    CSV,
+    CSV(CSV),
     #[cfg(feature = "gpio")]
     GPIO(GPIO),
 }
@@ -33,6 +33,21 @@ pub struct Matrix {
     pub username: Option<String>,
     #[clap(short, long)]
     pub password: Option<String>,
+}
+
+#[cfg(feature = "csv")]
+#[derive(Deserialize, Parser, Debug)]
+pub struct CSV {
+    #[clap(short, long)]
+    #[arg(default_value = "Some(String::from(\"/etc/labadoor\"))")]
+    pub path: Option<String>,
+    #[clap(short, long)]
+    pub method: String,
+    #[clap(short, long)]
+    pub identifier: String,
+    // #[cfg(feature = "multiple_resources")]
+    #[clap(short, long)]
+    pub resource_shortcut: i8,
 }
 
 #[cfg(feature = "gpio")]
