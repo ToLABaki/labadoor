@@ -1,24 +1,4 @@
-use serde_derive::Deserialize;
-
-#[derive(Deserialize, Debug)]
-struct ACLEntry {
-    username: String,
-    resource: String,
-}
-
-#[derive(Deserialize, Debug)]
-struct AuthMethod {
-    username: String,
-    method: String,
-    identifier: String,
-}
-
-#[derive(Deserialize, Debug)]
-struct ResourceShortcuts {
-    username: String,
-    resource: String,
-    id: i8,
-}
+use labadoor_acl::{ACLEntry, AuthMethod, ResourceShortcuts};
 
 fn get_username(method: String, identifier: String) -> Result<String, ()> {
     let mut ret = Err(());
