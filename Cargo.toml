@@ -5,4 +5,5 @@ members = [
     "labadoor-telegram",
     "labadoor-csv",
     "labadoor",
+    "labadoor-acl",
 ]
