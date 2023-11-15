@@ -26,6 +26,10 @@ async fn on_room_message(event: SyncMessageEvent<MessageEventContent>, room: Roo
             let content = MessageEventContent::text_plain("Open sesame!");
             room.send(content, None).await.unwrap();
         }
+        if msg_body == "ping" {
+            let content = MessageEventContent::text_plain("Pong!");
+            room.send(content, None).await.unwrap();
+        }
     }
 }
 
