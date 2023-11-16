@@ -1,8 +1,14 @@
-use std::convert::TryFrom;
 use matrix_sdk::{
-    Client, SyncSettings,
-    ruma::{UserId, events::{SyncMessageEvent, room::message::{MessageEventContent, MessageType,  TextMessageEventContent,}}},
+    config::SyncSettings,
     room::Room,
+    ruma::{
+        events::room::message::{
+            MessageType, OriginalSyncRoomMessageEvent, RoomMessageEventContent,
+            TextMessageEventContent,
+        },
+        UserId,
+    },
+    Client,
 };
 
 fn open(param: String) {
@@ -14,7 +20,7 @@ fn open(param: String) {
     io::stdout().write_all(&out.stdout).unwrap();
 }
 
-async fn on_room_message(event: SyncMessageEvent<MessageEventContent>, room: Room) {
+async fn on_room_message(event: OriginalSyncRoomMessageEvent, room: Room) {
     if let Room::Joined(room) = room {
         let msg_body = match event.content.msgtype {
             MessageType::Text(TextMessageEventContent { body, .. }) => body,
@@ -23,11 +29,11 @@ async fn on_room_message(event: SyncMessageEvent<MessageEventContent>, room: Roo
 
         if msg_body == "1" {
             open(event.sender.to_string());
-            let content = MessageEventContent::text_plain("Open sesame!");
+            let content = RoomMessageEventContent::text_plain("Open sesame!");
             room.send(content, None).await.unwrap();
         }
         if msg_body == "ping" {
-            let content = MessageEventContent::text_plain("Pong!");
+            let content = RoomMessageEventContent::text_plain("Pong!");
             room.send(content, None).await.unwrap();
         }
     }
@@ -35,12 +41,16 @@ async fn on_room_message(event: SyncMessageEvent<MessageEventContent>, room: Roo
 
 #[tokio::main]
 pub async fn matrix(username: String, password: String) {
-    let user = UserId::try_from(username).unwrap();
-    let client = Client::new_from_user_id(user.clone()).await.unwrap();
+    let user = <&UserId>::try_from(username.as_str()).unwrap();
+    let client = Client::builder()
+        .server_name(user.server_name())
+        .build()
+        .await
+        .unwrap();
+    client.login_username(user, &password).send().await.unwrap();
 
-    client.login(user.localpart(), &password, None, None).await.unwrap();
     client.sync_once(SyncSettings::default()).await.unwrap();
-    client.register_event_handler(on_room_message).await;
+    client.add_event_handler(on_room_message);
     let settings = SyncSettings::default().token(client.sync_token().await.unwrap());
     client.sync(settings).await;
 }
