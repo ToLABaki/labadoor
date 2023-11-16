@@ -12,9 +12,9 @@ use matrix_sdk::{
 };
 
 fn open(param: String) {
-    use std::process::Command;
     use std::io::{self, Write};
-    let mut cmd = Command::new("/usr/local/bin/doorlock");
+    use std::process::Command;
+    let mut cmd = Command::new("/usr/bin/labadoor-wrapper");
     cmd.arg("matrix").arg(param);
     let out = cmd.output().expect("Could not run command");
     io::stdout().write_all(&out.stdout).unwrap();
@@ -52,5 +52,5 @@ pub async fn matrix(username: String, password: String) {
     client.sync_once(SyncSettings::default()).await.unwrap();
     client.add_event_handler(on_room_message);
     let settings = SyncSettings::default().token(client.sync_token().await.unwrap());
-    client.sync(settings).await;
+    client.sync(settings).await.unwrap();
 }
