@@ -23,12 +23,16 @@ fn open(param: String) {
 async fn on_room_message(
     event: OriginalSyncMessageLikeEvent<RoomMessageEventContent>,
     room: Room,
+    client: Client,
 ) {
     if let Room::Joined(room) = room {
         let msg_body = match event.content.msgtype {
             MessageType::Text(TextMessageEventContent { body, .. }) => body,
             _ => return,
         };
+        if event.sender == client.user_id().unwrap() {
+            return;
+        }
 
         if msg_body == "1" {
             open(event.sender.to_string());
