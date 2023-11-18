@@ -3,8 +3,9 @@ use matrix_sdk::{
     room::Room,
     ruma::{
         events::{
+            room::member::RoomMemberEventContent,
             room::message::{MessageType, RoomMessageEventContent, TextMessageEventContent},
-            OriginalSyncMessageLikeEvent,
+            OriginalSyncMessageLikeEvent, StrippedStateEvent,
         },
         UserId,
     },
@@ -46,6 +47,15 @@ async fn on_room_message(
     }
 }
 
+async fn on_room_invite(event: StrippedStateEvent<RoomMemberEventContent>, room: Room) {
+    use matrix_sdk::ruma::events::room::member::MembershipState::Invite;
+    if event.content.membership == Invite {
+        if let Room::Invited(r) = room {
+            r.accept_invitation().await.unwrap();
+        }
+    }
+}
+
 async fn client_login(username: String, password: String, device_id: Option<String>) -> Client {
     let user = <&UserId>::try_from(username.as_str()).unwrap();
     let client = Client::builder()
@@ -74,5 +84,6 @@ pub async fn matrix(username: String, password: String, device_id: Option<String
     let client = client_login(username, password, device_id).await;
     client.sync_once(SyncSettings::default()).await.unwrap();
     client.add_event_handler(on_room_message);
+    client.add_event_handler(on_room_invite);
     client.sync(SyncSettings::default()).await.unwrap();
 }
