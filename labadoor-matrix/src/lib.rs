@@ -2,9 +2,9 @@ use matrix_sdk::{
     config::SyncSettings,
     room::Room,
     ruma::{
-        events::room::message::{
-            MessageType, OriginalSyncRoomMessageEvent, RoomMessageEventContent,
-            TextMessageEventContent,
+        events::{
+            room::message::{MessageType, RoomMessageEventContent, TextMessageEventContent},
+            OriginalSyncMessageLikeEvent,
         },
         UserId,
     },
@@ -20,7 +20,10 @@ fn open(param: String) {
     io::stdout().write_all(&out.stdout).unwrap();
 }
 
-async fn on_room_message(event: OriginalSyncRoomMessageEvent, room: Room) {
+async fn on_room_message(
+    event: OriginalSyncMessageLikeEvent<RoomMessageEventContent>,
+    room: Room,
+) {
     if let Room::Joined(room) = room {
         let msg_body = match event.content.msgtype {
             MessageType::Text(TextMessageEventContent { body, .. }) => body,
