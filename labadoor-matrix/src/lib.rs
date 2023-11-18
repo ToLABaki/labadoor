@@ -67,6 +67,5 @@ pub async fn matrix(username: String, password: String, device_id: Option<String
     let client = client_login(username, password, device_id).await;
     client.sync_once(SyncSettings::default()).await.unwrap();
     client.add_event_handler(on_room_message);
-    let settings = SyncSettings::default().token(client.sync_token().await.unwrap());
-    client.sync(settings).await.unwrap();
+    client.sync(SyncSettings::default()).await.unwrap();
 }
