@@ -33,6 +33,8 @@ pub struct Matrix {
     pub username: Option<String>,
     #[clap(short, long)]
     pub password: Option<String>,
+    #[clap(short, long)]
+    pub device_id: Option<String>,
 }
 
 #[cfg(feature = "csv")]

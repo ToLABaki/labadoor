@@ -4,6 +4,7 @@ token = ""
 [matrix]
 username = ""
 password = ""
+device_id = ""
 
 [gpio]
 device = ""
