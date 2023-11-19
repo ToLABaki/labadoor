@@ -5,10 +5,8 @@ edition = "2021"
 license = "AGPL-3.0-or-later"
 
 [dependencies]
-log = "0.4.14"
-pretty_env_logger = "0.4.0"
-teloxide = {version = "0.5.2", features = ["macros", "auto-send"]}
-tokio = { version =  "1.12.0", features = ["rt-multi-thread", "macros"] }
+teloxide = { version = "0.12.2", features = ["macros"] }
+tokio = { version = "1.34.0", features = ["rt-multi-thread", "macros"] }
 
 [target.armv7-unknown-linux-musleabihf.dependencies]
 openssl-sys = { version = "0.9.67", features = ["vendored"] }

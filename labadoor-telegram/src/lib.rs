@@ -1,8 +1,10 @@
-use teloxide::{prelude::*, utils::command::BotCommand};
-use std::error::Error;
+use teloxide::{prelude::*, utils::command::BotCommands};
 
-#[derive(BotCommand)]
-#[command(rename = "lowercase", description = "These commands are supported:")]
+#[derive(BotCommands, Clone)]
+#[command(
+    rename_rule = "lowercase",
+    description = "These commands are supported:"
+)]
 enum Command {
     #[command(description = "Ping")]
     Ping,
@@ -23,20 +25,17 @@ fn open(param: i64) {
     io::stdout().write_all(&out.stdout).unwrap();
 }
 
-async fn answer(
-    cx: UpdateWithCx<AutoSend<Bot>, Message>,
-    command: Command,
-) -> Result<(), Box<dyn Error + Send + Sync>> {
+async fn answer(bot: Bot, message: Message, command: Command) -> ResponseResult<()> {
     match command {
-        Command::Ping => cx.answer("Pong!").await?,
+        Command::Ping => bot.send_message(message.chat.id, "Pong!").await?,
         Command::Open => {
-            open(cx.update.chat_id());
-            cx.answer("Open sesame!").await?
-        },
+            open(message.chat.id.0);
+            bot.send_message(message.chat.id, "Open Sesame!").await?
+        }
         Command::Register | Command::Start => {
-            let msg = format!("Your Telegram ID is: {}", cx.update.chat_id());
-            cx.answer(msg).await?
-        },
+            let msg = format!("Your Telegram ID is: {}", message.chat.id);
+            bot.send_message(message.chat.id, msg).await?
+        }
     };
 
     Ok(())
@@ -44,9 +43,6 @@ async fn answer(
 
 #[tokio::main]
 pub async fn telegram(token: String) {
-    teloxide::enable_logging!();
-    log::info!("Starting labadoor Telegram bot...");
-    let bot = Bot::new(token).auto_send();
-    let bot_name: String = "Labadoor Telegram bot".to_string();
-    teloxide::commands_repl(bot, bot_name, answer).await;
+    let bot = Bot::new(token);
+    Command::repl(bot, answer).await;
 }
