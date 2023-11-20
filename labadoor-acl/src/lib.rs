@@ -28,16 +28,14 @@ pub struct LogEntry {
 }
 
 impl PartialEq for AuthMethod {
-    fn eq(&self, other: &Self) -> bool{
-        (self.method == other.method)
-            && (self.identifier == other.identifier)
+    fn eq(&self, other: &Self) -> bool {
+        (self.method == other.method) && (self.identifier == other.identifier)
     }
 }
 
 impl PartialEq for ResourceShortcuts {
-    fn eq(&self, other: &Self) -> bool{
-        (self.username == other.username)
-            && (self.id == other.id)
+    fn eq(&self, other: &Self) -> bool {
+        (self.username == other.username) && (self.id == other.id)
     }
 }
 
