@@ -1,3 +1,4 @@
+use labadoor_acl::ACL;
 mod cli;
 
 fn main() {
@@ -25,12 +26,10 @@ fn main() {
         #[cfg(feature = "csv")]
         cli::Command::CSV(_) => {
             let csv = config.get::<cli::CSV>("csv").unwrap();
-            labadoor_csv::csv(
-                csv.path.unwrap(),
-                csv.method.unwrap(),
-                csv.identifier.unwrap(),
-                csv.resource_shortcut.unwrap(),
-            );
+            let c = labadoor_csv::CSV {
+                path: csv.path.unwrap(),
+            };
+            c.auth_user(csv.method, csv.identifier, csv.resource_shortcut);
         }
         #[cfg(feature = "gpio")]
         cli::Command::GPIO(_) => {
