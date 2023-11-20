@@ -54,9 +54,9 @@ pub trait ACL {
     fn del_shortcut(&self, user: Option<String>, resource: Option<String>, shortcut: Option<i8>);
 
     /// Queries
-    fn get_username(&self, method: String, identifier: String) -> Result<String, ()>;
-    fn get_resource(&self, username: String, shortcut: i8) -> Result<String, ()>;
-    fn is_allowed(&self, username: String, resource: String) -> Result<(), ()>;
+    fn get_username(&self, method: String, identifier: String) -> Option<String>;
+    fn get_resource(&self, username: String, shortcut: i8) -> Option<String>;
+    fn is_allowed(&self, username: String, resource: String) -> Option<()>;
 
     fn del_user(&self, user: String) {
         self.deny_access(Some(user.clone()), None);
@@ -83,9 +83,9 @@ pub trait ACL {
     }
 
     fn auth_user(&self, method: String, identifier: String, shortcut: i8) {
-        if let Ok(username) = self.get_username(method, identifier) {
-            if let Ok(resource) = self.get_resource(username.clone(), shortcut) {
-                if self.is_allowed(username.clone(), resource).is_ok() {
+        if let Some(username) = self.get_username(method, identifier) {
+            if let Some(resource) = self.get_resource(username.clone(), shortcut) {
+                if self.is_allowed(username.clone(), resource).is_some() {
                     println!("Open Sesame! {}", username);
                 }
             }
