@@ -57,8 +57,12 @@ impl ACL for CSV {
             identifier: identifier,
             username: "".to_string(),
         };
-        let res = self.find::<AuthMethod>(needle, "auth_methods.csv").unwrap();
-        Some(res.username)
+        let res = self.find::<AuthMethod>(needle, "auth_methods.csv");
+        return if let Some(r) = res {
+            Some(r.username)
+        } else {
+            None
+        };
     }
     fn get_resource(&self, username: String, id: i8) -> Option<String> {
         let needle = ResourceShortcuts {
@@ -66,14 +70,16 @@ impl ACL for CSV {
             id: id,
             resource: "".to_string(),
         };
-        let res = self
-            .find::<ResourceShortcuts>(needle, "resource_shortcuts.csv")
-            .unwrap();
-        Some(res.resource)
+        let res = self.find::<ResourceShortcuts>(needle, "resource_shortcuts.csv");
+        return if let Some(r) = res {
+            Some(r.resource)
+        } else {
+            None
+        };
     }
     fn is_allowed(&self, username: String, resource: String) -> Option<()> {
         let needle = ACLEntry { username, resource };
-        self.find::<ACLEntry>(needle, "acl_entries.csv").unwrap();
-        Some(())
+        let res = self.find::<ACLEntry>(needle, "acl_entries.csv");
+        return if let Some(r) = res { Some(()) } else { None };
     }
 }
