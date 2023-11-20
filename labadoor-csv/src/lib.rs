@@ -1,17 +1,8 @@
-use labadoor_acl::{ACLEntry, AuthMethod, ResourceShortcuts};
+use labadoor_acl::{ACLEntry, AuthMethod, ResourceShortcuts, ACL};
+use serde::Deserialize;
 
-fn get_username(method: String, identifier: String) -> Result<String, ()> {
-    let mut ret = Err(());
-    let file = std::fs::File::open("./auth_methods.csv").unwrap();
-    let mut reader = csv::Reader::from_reader(file);
-    for result in reader.deserialize() {
-        let m: AuthMethod = result.unwrap();
-        if m.method == method && m.identifier == identifier {
-            ret = Ok(m.username);
-            break;
-        }
-    }
-    return ret;
+pub struct CSV {
+    pub path: String,
 }
 
 fn get_resource_name(username: String, id: i8) -> Result<String, ()> {
@@ -28,21 +19,35 @@ fn get_resource_name(username: String, id: i8) -> Result<String, ()> {
     return ret;
 }
 
-fn auth_user(username: String, resource: String) -> Result<(), ()> {
-    let mut ret = Err(());
-    let file = std::fs::File::open("./acl_entries.csv").unwrap();
-    let mut reader = csv::Reader::from_reader(file);
-    for result in reader.deserialize() {
-        let e: ACLEntry = result.unwrap();
-        if e.username == username && e.resource == resource {
-            ret = Ok(());
-            break;
-        }
+impl ACL for CSV {
+    /// ACLEntry
+    fn allow_access(&self, user: String, resource: String) {
+        todo!();
     }
-    return ret;
-}
+    fn deny_access(&self, user: Option<String>, resource: Option<String>) {
+        todo!();
+    }
 
-pub fn csv(path: String, method: String, identifier: String, resource_shortcut: i8) {
+    /// AuthMethod
+    fn add_auth_method(&self, user: String, method: String, identifier: String) {
+        todo!();
+    }
+    fn del_auth_method(
+        &self,
+        user: Option<String>,
+        method: Option<String>,
+        identifier: Option<String>,
+    ) {
+        todo!();
+    }
+
+    /// ResourceShortcuts
+    fn add_shortcut(&self, user: String, resource: String, shortcut: i8) {
+        todo!();
+    }
+    fn del_shortcut(&self, user: Option<String>, resource: Option<String>, shortcut: Option<i8>) {
+        todo!();
+    }
 
     if let Ok(username) = get_username(method, identifier) {
         if let Ok(resource_name) = get_resource_name(username.clone(), resource_shortcut) {
