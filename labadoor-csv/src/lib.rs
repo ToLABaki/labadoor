@@ -5,18 +5,19 @@ pub struct CSV {
     pub path: String,
 }
 
-fn get_resource_name(username: String, id: i8) -> Result<String, ()> {
-    let mut ret = Err(());
-    let file = std::fs::File::open("./resource_shortcuts.csv").unwrap();
-    let mut reader = csv::Reader::from_reader(file);
-    for result in reader.deserialize() {
-        let rs: ResourceShortcuts = result.unwrap();
-        if rs.username == username && rs.id == id {
-            ret = Ok(rs.resource);
-            break;
-        }
+impl CSV {
+    fn find<T: for<'a> Deserialize<'a> + PartialEq>(&self, needle: T, path: &str) -> Option<T> {
+        let p = format!("{}/{}", self.path, path);
+        println!("{}", p);
+        let file = std::fs::File::open(p).unwrap();
+        let mut reader = csv::Reader::from_reader(file);
+        reader
+            .deserialize()
+            .map(|x: Result<T, csv::Error>| x.unwrap())
+            .collect::<Vec<T>>()
+            .into_iter()
+            .find(|x: &T| x == &needle)
     }
-    return ret;
 }
 
 impl ACL for CSV {
@@ -49,11 +50,30 @@ impl ACL for CSV {
         todo!();
     }
 
-    if let Ok(username) = get_username(method, identifier) {
-        if let Ok(resource_name) = get_resource_name(username.clone(), resource_shortcut) {
-            if auth_user(username, resource_name).is_ok() {
-                println!("Open Sesame!");
-            }
-        }
+    /// Queries
+    fn get_username(&self, method: String, identifier: String) -> Option<String> {
+        let needle = AuthMethod {
+            method: method,
+            identifier: identifier,
+            username: "".to_string(),
+        };
+        let res = self.find::<AuthMethod>(needle, "auth_methods.csv").unwrap();
+        Some(res.username)
+    }
+    fn get_resource(&self, username: String, id: i8) -> Option<String> {
+        let needle = ResourceShortcuts {
+            username: username,
+            id: id,
+            resource: "".to_string(),
+        };
+        let res = self
+            .find::<ResourceShortcuts>(needle, "resource_shortcuts.csv")
+            .unwrap();
+        Some(res.resource)
+    }
+    fn is_allowed(&self, username: String, resource: String) -> Option<()> {
+        let needle = ACLEntry { username, resource };
+        self.find::<ACLEntry>(needle, "acl_entries.csv").unwrap();
+        Some(())
     }
 }
