@@ -20,6 +20,13 @@ pub struct ResourceShortcuts {
     pub id: i8,
 }
 
+#[derive(Deserialize, Debug)]
+pub struct LogEntry {
+    pub username: String,
+    pub resource: String,
+    pub method: String,
+}
+
 impl PartialEq for AuthMethod {
     fn eq(&self, other: &Self) -> bool{
         (self.method == other.method)
@@ -82,13 +89,22 @@ pub trait ACL {
         self.add_shortcut(username, resource, shortcut);
     }
 
-    fn auth_user(&self, method: String, identifier: String, shortcut: i8) {
-        if let Some(username) = self.get_username(method, identifier) {
+    fn auth_user(&self, method: String, identifier: String, shortcut: i8) -> Option<LogEntry> {
+        let mut ret = None;
+        if let Some(username) = self.get_username(method.clone(), identifier) {
             if let Some(resource) = self.get_resource(username.clone(), shortcut) {
-                if self.is_allowed(username.clone(), resource).is_some() {
-                    println!("Open Sesame! {}", username);
+                if self
+                    .is_allowed(username.clone(), resource.clone())
+                    .is_some()
+                {
+                    ret = Some(LogEntry {
+                        username,
+                        resource,
+                        method,
+                    });
                 }
             }
         }
+        ret
     }
 }
