@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, PartialEq, Debug)]
 pub struct ACLEntry {
     pub username: String,
     pub resource: String,
@@ -18,6 +18,20 @@ pub struct ResourceShortcuts {
     pub username: String,
     pub resource: String,
     pub id: i8,
+}
+
+impl PartialEq for AuthMethod {
+    fn eq(&self, other: &Self) -> bool{
+        (self.method == other.method)
+            && (self.identifier == other.identifier)
+    }
+}
+
+impl PartialEq for ResourceShortcuts {
+    fn eq(&self, other: &Self) -> bool{
+        (self.username == other.username)
+            && (self.id == other.id)
+    }
 }
 
 pub trait ACL {
