@@ -31,13 +31,8 @@ fn main() {
         }
         #[cfg(feature = "gpio")]
         cli::Command::GPIO(_) => {
-            let gpio = config.get::<cli::GPIO>("gpio").unwrap();
-            labadoor_gpio::gpio(
-                gpio.device.unwrap(),
-                gpio.pin.unwrap(),
-                gpio.active_low.unwrap(),
-                gpio.active_time.unwrap(),
-            );
+            let gpio = config.get::<cli::GPIO>("gpio").unwrap().to_config();
+            labadoor_gpio::gpio(gpio);
         }
     }
 }

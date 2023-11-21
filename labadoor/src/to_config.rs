@@ -23,3 +23,15 @@ impl ToConfig<labadoor_matrix::MatrixArgs> for Matrix {
         }
     }
 }
+
+#[cfg(feature = "gpio")]
+impl ToConfig<labadoor_gpio::GPIOArgs> for GPIO {
+    fn to_config(&self) -> labadoor_gpio::GPIOArgs {
+        labadoor_gpio::GPIOArgs {
+            device: self.device.clone().unwrap(),
+            pin: self.pin.unwrap(),
+            active_low: self.active_low.unwrap(),
+            active_time: self.active_time.unwrap(),
+        }
+    }
+}
