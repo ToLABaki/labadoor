@@ -18,12 +18,8 @@ fn main() {
         }
         #[cfg(feature = "matrix")]
         cli::Command::Matrix(_) => {
-            let matrix = config.get::<cli::Matrix>("matrix").unwrap();
-            labadoor_matrix::matrix(
-                matrix.username.unwrap(),
-                matrix.password.unwrap(),
-                matrix.device_id,
-            );
+            let matrix = config.get::<cli::Matrix>("matrix").unwrap().to_config();
+            labadoor_matrix::matrix(matrix);
         }
         #[cfg(feature = "csv")]
         cli::Command::CSV(_) => {

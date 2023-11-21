@@ -12,3 +12,14 @@ impl ToConfig<labadoor_telegram::TelegramArgs> for Telegram {
         }
     }
 }
+
+#[cfg(feature = "matrix")]
+impl ToConfig<labadoor_matrix::MatrixArgs> for Matrix {
+    fn to_config(&self) -> labadoor_matrix::MatrixArgs {
+        labadoor_matrix::MatrixArgs {
+            username: self.username.clone().unwrap(),
+            password: self.password.clone().unwrap(),
+            device_id: self.device_id.clone(),
+        }
+    }
+}

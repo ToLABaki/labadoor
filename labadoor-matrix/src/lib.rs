@@ -12,6 +12,12 @@ use matrix_sdk::{
     Client,
 };
 
+pub struct MatrixArgs {
+    pub username: String,
+    pub password: String,
+    pub device_id: Option<String>,
+}
+
 fn open(param: String) {
     use std::io::{self, Write};
     use std::process::Command;
@@ -80,8 +86,8 @@ async fn client_login(username: String, password: String, device_id: Option<Stri
 }
 
 #[tokio::main]
-pub async fn matrix(username: String, password: String, device_id: Option<String>) {
-    let client = client_login(username, password, device_id).await;
+pub async fn matrix(args: MatrixArgs) {
+    let client = client_login(args.username, args.password, args.device_id).await;
     client.sync_once(SyncSettings::default()).await.unwrap();
     client.add_event_handler(on_room_message);
     client.add_event_handler(on_room_invite);
