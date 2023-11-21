@@ -1,5 +1,7 @@
 use labadoor_acl::ACL;
 mod cli;
+mod to_config;
+use to_config::ToConfig;
 
 fn main() {
     let cli = cli::parse();
@@ -11,8 +13,8 @@ fn main() {
     match &cli.command {
         #[cfg(feature = "telegram")]
         cli::Command::Telegram(_) => {
-            let telegram = config.get::<cli::Telegram>("telegram").unwrap();
-            labadoor_telegram::telegram(telegram.token.unwrap());
+            let telegram = config.get::<cli::Telegram>("telegram").unwrap().to_config();
+            labadoor_telegram::telegram(telegram);
         }
         #[cfg(feature = "matrix")]
         cli::Command::Matrix(_) => {

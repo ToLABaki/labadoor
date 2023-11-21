@@ -1,5 +1,9 @@
 use teloxide::{prelude::*, utils::command::BotCommands};
 
+pub struct TelegramArgs {
+    pub token: String,
+}
+
 #[derive(BotCommands, Clone)]
 #[command(
     rename_rule = "lowercase",
@@ -42,7 +46,7 @@ async fn answer(bot: Bot, message: Message, command: Command) -> ResponseResult<
 }
 
 #[tokio::main]
-pub async fn telegram(token: String) {
-    let bot = Bot::new(token);
+pub async fn telegram(args: TelegramArgs) {
+    let bot = Bot::new(args.token);
     Command::repl(bot, answer).await;
 }
