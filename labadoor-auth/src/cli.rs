@@ -1,4 +1,5 @@
 use clap::{Parser, ValueEnum};
+use serde::Deserialize;
 
 #[derive(Parser, Debug)]
 pub struct Cli {
@@ -28,4 +29,12 @@ pub struct Open {
 
 pub fn parse() -> Cli {
     Cli::parse()
+}
+
+#[cfg(feature = "csv")]
+#[derive(Deserialize, Parser, Debug)]
+pub struct CSV {
+    #[clap(short, long)]
+    #[arg(default_value = "Some(String::from(\"/etc/labadoor\"))")]
+    pub path: String,
 }

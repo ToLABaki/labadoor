@@ -1,4 +1,3 @@
-use labadoor_acl::ACL;
 mod cli;
 mod to_config;
 use to_config::ToConfig;
@@ -21,14 +20,6 @@ fn main() {
             let matrix = config.get::<cli::Matrix>("matrix").unwrap().to_config();
             labadoor_matrix::matrix(matrix);
         }
-        #[cfg(feature = "csv")]
-        cli::Command::CSV(_) => {
-            let csv = config.get::<cli::CSV>("csv").unwrap();
-            let c = labadoor_csv::CSV {
-                path: csv.path.unwrap(),
-            };
-            c.auth_user(csv.method, csv.identifier, csv.resource_shortcut);
-        }
         #[cfg(feature = "gpio")]
         cli::Command::GPIO(_) => {
             let gpio = config.get::<cli::GPIO>("gpio").unwrap().to_config();
@@ -36,7 +27,7 @@ fn main() {
         }
         #[cfg(feature = "auth")]
         cli::Command::Auth(cli) => {
-            labadoor_auth::auth(cli);
+            labadoor_auth::auth(cli, config);
         }
     }
 }

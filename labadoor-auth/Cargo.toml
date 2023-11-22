@@ -5,7 +5,10 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.4.8", features = ["derive"] }
+config = "0.13.4"
+labadoor-acl = { path = "../labadoor-acl" }
 labadoor-csv = { path = "../labadoor-csv", optional = true }
+serde = { version = "1.0.193", features = ["derive"] }
 
 [features]
 csv = ["dep:labadoor-csv"]
