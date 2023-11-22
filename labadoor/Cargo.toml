@@ -9,6 +9,7 @@ labadoor-telegram = { path = "../labadoor-telegram", optional = true }
 labadoor-matrix = { path = "../labadoor-matrix", optional = true }
 labadoor-csv = { path = "../labadoor-csv", optional = true }
 labadoor-gpio = { path = "../labadoor-gpio", optional = true }
+labadoor-auth = { path = "../labadoor-auth", optional = true }
 labadoor-acl = { path = "../labadoor-acl" }
 serde = { version = "1.0.164", features = ["derive"] }
 config = "0.13.3"
@@ -18,3 +19,4 @@ telegram = ["dep:labadoor-telegram"]
 matrix = ["dep:labadoor-matrix"]
 csv = ["dep:labadoor-csv"]
 gpio = ["dep:labadoor-gpio"]
+auth = ["dep:labadoor-auth"]

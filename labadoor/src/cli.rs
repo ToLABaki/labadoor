@@ -17,6 +17,8 @@ pub enum Command {
     CSV(CSV),
     #[cfg(feature = "gpio")]
     GPIO(GPIO),
+    #[cfg(feature = "auth")]
+    Auth(labadoor_auth::cli::Cli),
 }
 
 #[cfg(feature = "telegram")]
