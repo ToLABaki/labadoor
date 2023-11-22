@@ -1,6 +1,18 @@
 use labadoor_acl::{ACLEntry, AuthMethod, ResourceShortcuts, ACL};
 use serde::Deserialize;
 
+pub struct CSVArgs {
+    pub path: String,
+}
+
+impl CSVArgs {
+    pub fn new(&self) -> CSV {
+        CSV {
+            path: self.path.clone(),
+        }
+    }
+}
+
 pub struct CSV {
     pub path: String,
 }
