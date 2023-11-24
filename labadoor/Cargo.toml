@@ -13,6 +13,7 @@ labadoor-auth = { path = "../labadoor-auth", optional = true }
 labadoor-acl = { path = "../labadoor-acl" }
 serde = { version = "1.0.164", features = ["derive"] }
 config = "0.13.3"
+toml = "0.8.8"
 
 [features]
 telegram = ["dep:labadoor-telegram"]

@@ -2,32 +2,45 @@ mod cli;
 mod to_config;
 use to_config::ToConfig;
 
+macro_rules! add_cliargs {
+    ($d:ident,$section:expr,$i:ident) => {
+        $d.add_source(config::File::from_str(
+            &format!("[{}]\n{}", $section, toml::to_string($i).unwrap()),
+            config::FileFormat::Toml,
+        ))
+        .build()
+        .unwrap()
+    };
+}
+
 fn main() {
     let cli = cli::parse();
     let config = config::Config::builder()
-        .add_source(config::File::with_name("./config.toml").required(false))
-        .add_source(config::Environment::with_prefix("LABADOOR").separator("_"))
-        .build()
-        .unwrap();
+        .add_source(config::File::with_name(path).required(false))
+        .add_source(config::Environment::with_prefix("LABADOOR").separator("_"));
     match &cli.command {
         #[cfg(feature = "telegram")]
-        cli::Command::Telegram(_) => {
+        cli::Command::Telegram(cliargs) => {
+            let config = add_cliargs!(config, "telegram", cliargs);
             let telegram = config.get::<cli::Telegram>("telegram").unwrap().to_config();
             labadoor_telegram::telegram(telegram);
         }
         #[cfg(feature = "matrix")]
-        cli::Command::Matrix(_) => {
+        cli::Command::Matrix(cliargs) => {
+            let config = add_cliargs!(config, "matrix", cliargs);
             let matrix = config.get::<cli::Matrix>("matrix").unwrap().to_config();
             labadoor_matrix::matrix(matrix);
         }
         #[cfg(feature = "gpio")]
-        cli::Command::GPIO(_) => {
+        cli::Command::GPIO(cliargs) => {
+            let config = add_cliargs!(config, "gpio", cliargs);
             let gpio = config.get::<cli::GPIO>("gpio").unwrap().to_config();
             labadoor_gpio::gpio(gpio);
         }
         #[cfg(feature = "auth")]
         cli::Command::Auth(cli) => {
-            labadoor_auth::auth(cli, config);
+            let config = config.build().unwrap();
+            labadoor_auth::auth(&cli, config);
         }
     }
 }
