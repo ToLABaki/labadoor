@@ -11,3 +11,6 @@ device = ""
 pin = 1
 active_low = false
 active_time = 2000
+
+[auth]
+backends = ["csv"]

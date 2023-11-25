@@ -39,7 +39,6 @@ fn main() {
         }
         #[cfg(feature = "auth")]
         cli::Command::Auth(cli) => {
-            let config = config.build().unwrap();
             labadoor_auth::auth(&cli, config);
         }
     }

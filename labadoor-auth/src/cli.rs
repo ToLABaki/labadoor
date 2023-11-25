@@ -1,26 +1,27 @@
 use clap::{Parser, ValueEnum};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Parser, Debug)]
+#[derive(Serialize, Parser, Debug)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Command,
     #[arg(short, long, value_enum)]
-    pub backend: Backend,
+    pub backends: Option<Vec<Backend>>,
 }
 
-#[derive(Parser, ValueEnum, Clone, Debug)]
+#[derive(Serialize, Deserialize, Parser, ValueEnum, Clone, Debug)]
+#[serde(rename_all = "lowercase")]
 pub enum Backend {
     #[cfg(feature = "csv")]
     CSV,
 }
 
-#[derive(Parser, Debug)]
+#[derive(Serialize, Parser, Debug)]
 pub enum Command {
     Open(Open),
 }
 
-#[derive(Parser, Debug)]
+#[derive(Serialize, Parser, Debug)]
 pub struct Open {
     pub method: String,
     pub identifier: String,
