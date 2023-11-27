@@ -17,6 +17,8 @@ pub enum Command {
     GPIO(GPIO),
     #[cfg(feature = "auth")]
     Auth(labadoor_auth::cli::Cli),
+    #[cfg(feature = "open")]
+    Open(Open),
 }
 
 #[cfg(feature = "telegram")]
@@ -50,6 +52,19 @@ pub struct GPIO {
     #[clap(short = 't', long)]
     #[arg(default_value = "Some(2000)")]
     pub active_time: Option<u32>,
+}
+
+use std::collections::BTreeMap;
+#[cfg(feature = "open")]
+#[derive(Serialize, Deserialize, Parser, Clone, Debug)]
+pub struct Open {
+    #[clap(skip)]
+    pub auth: BTreeMap<String, Vec<String>>,
+    #[clap(skip)]
+    pub hardware: BTreeMap<String, Vec<String>>,
+    pub method: String,
+    pub identifier: String,
+    pub resource_shortcut: i8,
 }
 
 pub fn parse() -> Cli {

@@ -38,6 +38,12 @@ fn main() -> Result<(), ()> {
             let gpio = config.get::<cli::GPIO>("gpio").unwrap().to_config();
             labadoor_gpio::gpio(gpio);
         }
+        #[cfg(feature = "open")]
+        cli::Command::Open(cliargs) => {
+            let config = add_cliargs!(config, "open", cliargs);
+            let open = config.get::<cli::Open>("open").unwrap().to_config();
+            labadoor_open::open(open);
+        }
         #[cfg(feature = "auth")]
         cli::Command::Auth(cli) => ret = labadoor_auth::auth(&cli, config),
     }

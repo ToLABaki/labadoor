@@ -35,3 +35,16 @@ impl ToConfig<labadoor_gpio::GPIOArgs> for GPIO {
         }
     }
 }
+
+#[cfg(feature = "open")]
+impl ToConfig<labadoor_open::OpenArgs> for Open {
+    fn to_config(&self) -> labadoor_open::OpenArgs {
+        labadoor_open::OpenArgs {
+            auth: self.auth.clone(),
+            hardware: self.hardware.clone(),
+            method: self.method.clone(),
+            identifier: self.identifier.clone(),
+            resource_shortcut: self.resource_shortcut,
+        }
+    }
+}

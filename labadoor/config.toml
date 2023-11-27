@@ -14,3 +14,10 @@ active_time = 2000
 
 [auth]
 backends = ["csv"]
+
+[open.auth]
+labadoor = [ "/usr/bin/labadoor", "auth" ]
+
+[open.hardware]
+tolabaki = [ "/usr/bin/labadoor", "gpio" ]
+
