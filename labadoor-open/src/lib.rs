@@ -17,22 +17,24 @@ struct AuthResult {
     pub resource: String,
 }
 
-fn run_bin(bin: Binary) -> Result<String, ()> {
-    let mut ret = Err(());
+fn run_bin(bin: Binary) -> Result<String, String> {
+    let mut ret = Err("".to_string());
     let mut iter = bin.iter();
     let mut cmd = std::process::Command::new(iter.next().unwrap());
     cmd.args(iter);
 
-    if let Ok(_) = cmd.status() {
-        let stdout = cmd.output().unwrap().stdout;
-        let str = std::str::from_utf8(stdout.as_slice()).unwrap().trim();
-        ret = Ok(String::from(str));
-    }
+    let stdout = cmd.output().unwrap().stdout;
+    let str = std::str::from_utf8(stdout.as_slice())
+        .unwrap()
+        .trim()
+        .to_string();
+    let st = cmd.status().unwrap();
+    ret = if st.success() { Ok(str) } else { Err(str) };
     ret
 }
 
-fn run_auth(args: &OpenArgs, bin: Binary) -> Result<AuthResult, ()> {
-    let mut ret = Err(());
+fn run_auth(args: &OpenArgs, bin: Binary) -> Result<AuthResult, String> {
+    let mut ret = Err("".to_string());
 
     let mut auth_bin = bin.clone();
     auth_bin.push(args.method.clone());
@@ -50,17 +52,22 @@ fn run_auth(args: &OpenArgs, bin: Binary) -> Result<AuthResult, ()> {
     ret
 }
 
-pub fn open(args: OpenArgs) -> Result<(), String> {
-    let mut ret = Err("Not authorized!".to_string());
+pub fn open(args: OpenArgs) -> Result<(), ()> {
+    let mut msg = "Not authorized!";
+    let mut ret = Err(());
 
     for (method, binary) in args.auth.iter() {
         let output = run_auth(&args, binary.to_vec());
         if let Ok(user) = output {
             let resource_bin = args.hardware.get(&user.resource).unwrap();
             if let Ok(_) = run_bin(resource_bin.to_vec()) {
-                ret = Err("Hardware failure!".to_string());
+                msg = "Open sesame!";
+                ret = Ok(());
+            } else {
+                msg = "Hardware failure!";
             }
         }
     }
+    println!("{}", msg);
     ret
 }

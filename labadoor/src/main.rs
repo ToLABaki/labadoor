@@ -13,8 +13,11 @@ macro_rules! add_cliargs {
     };
 }
 
-fn main() -> Result<(), ()> {
-    let mut ret = Ok(());
+use std::process::ExitCode;
+fn main() -> ExitCode {
+    let mut ret = ExitCode::SUCCESS;
+    let mut module_result: Result<(), ()> = Ok(());
+
     let cli = cli::parse();
     let config = config::Config::builder()
         .add_source(config::File::with_name(path).required(false))
@@ -42,10 +45,14 @@ fn main() -> Result<(), ()> {
         cli::Command::Open(cliargs) => {
             let config = add_cliargs!(config, "open", cliargs);
             let open = config.get::<cli::Open>("open").unwrap().to_config();
-            labadoor_open::open(open);
+            module_result = labadoor_open::open(open);
         }
         #[cfg(feature = "auth")]
-        cli::Command::Auth(cli) => ret = labadoor_auth::auth(&cli, config),
+        cli::Command::Auth(cli) => module_result = labadoor_auth::auth(&cli, config),
+    }
+
+    if let Err(_) = module_result {
+        ret = ExitCode::FAILURE;
     }
     ret
 }
