@@ -14,8 +14,9 @@ macro_rules! add_cliargs {
     };
 }
 
-use std::collections::{HashMap, HashSet};
-pub fn auth(cli: &cli::Cli, config: config::ConfigBuilder<config::builder::DefaultState>) {
+use config::{builder::DefaultState, ConfigBuilder};
+pub fn auth(cli: &cli::Cli, config: ConfigBuilder<DefaultState>) -> Result<(), ()> {
+    let mut ret = Err(());
     let config = add_cliargs!(config, "auth", cli);
     let backends = config.get::<Vec<cli::Backend>>("auth.backends").unwrap();
     for backend in backends {
@@ -30,7 +31,12 @@ pub fn auth(cli: &cli::Cli, config: config::ConfigBuilder<config::builder::Defau
                     cliargs.identifier.clone(),
                     cliargs.resource.clone(),
                 );
+                if let Some(one) = found {
+                    println!("{},{}", one.username, one.resource);
+                    ret = Ok(())
+                }
             }
         };
     }
+    ret
 }

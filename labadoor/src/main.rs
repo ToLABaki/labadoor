@@ -13,7 +13,8 @@ macro_rules! add_cliargs {
     };
 }
 
-fn main() {
+fn main() -> Result<(), ()> {
+    let mut ret = Ok(());
     let cli = cli::parse();
     let config = config::Config::builder()
         .add_source(config::File::with_name(path).required(false))
@@ -38,8 +39,7 @@ fn main() {
             labadoor_gpio::gpio(gpio);
         }
         #[cfg(feature = "auth")]
-        cli::Command::Auth(cli) => {
-            labadoor_auth::auth(&cli, config);
-        }
+        cli::Command::Auth(cli) => ret = labadoor_auth::auth(&cli, config),
     }
+    ret
 }
