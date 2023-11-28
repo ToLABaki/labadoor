@@ -18,18 +18,24 @@ struct AuthResult {
 }
 
 fn run_bin(bin: Binary) -> Result<String, String> {
+    use std::{
+        io::Read,
+        process::{Command, Stdio},
+    };
+
     let mut ret = Err("".to_string());
     let mut iter = bin.iter();
-    let mut cmd = std::process::Command::new(iter.next().unwrap());
+    let mut cmd = Command::new(iter.next().unwrap());
     cmd.args(iter);
 
-    let stdout = cmd.output().unwrap().stdout;
-    let str = std::str::from_utf8(stdout.as_slice())
-        .unwrap()
-        .trim()
-        .to_string();
-    let st = cmd.status().unwrap();
-    ret = if st.success() { Ok(str) } else { Err(str) };
+    let mut child = cmd.stdout(Stdio::piped()).spawn().unwrap();
+    let mut success = child.wait().unwrap().success();
+
+    let mut s = String::from("");
+    child.stdout.unwrap().read_to_string(&mut s).unwrap();
+    s = String::from(s.trim());
+
+    ret = if success { Ok(s) } else { Err(s) };
     ret
 }
 
