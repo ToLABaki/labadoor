@@ -1,6 +1,7 @@
 use teloxide::{prelude::*, utils::command::BotCommands};
 
 pub struct TelegramArgs {
+    pub trigger: Vec<String>,
     pub token: String,
 }
 
@@ -20,22 +21,26 @@ enum Command {
     Start,
 }
 
-fn open(param: i64) {
-    use std::process::Command;
-    use std::io::{self, Write};
-    let mut cmd = Command::new("/usr/local/bin/doorlock");
-    cmd.arg("telegram").arg(param.to_string());
-    let out = cmd.output().expect("Could not run command");
-    io::stdout().write_all(&out.stdout).unwrap();
+fn open(trigger: Vec<String>, param: i64) -> Result<String, String> {
+    let a = labadoor_common::OpenBinaryArgs {
+        method: "telegram".to_string(),
+        identifier: param.to_string(),
+        resource_shortcut: 1,
+    };
+    labadoor_common::run_open(a, trigger)
 }
 
-async fn answer(bot: Bot, message: Message, command: Command) -> ResponseResult<()> {
+async fn answer(
+    bot: Bot,
+    trigger: Vec<String>,
+    message: Message,
+    command: Command,
+) -> ResponseResult<()> {
     match command {
         Command::Ping => bot.send_message(message.chat.id, "Pong!").await?,
-        Command::Open => {
-            open(message.chat.id.0);
-            bot.send_message(message.chat.id, "Open Sesame!").await?
-        }
+        Command::Open => match open(trigger, message.chat.id.0) {
+            Ok(msg) | Err(msg) => bot.send_message(message.chat.id, msg).await?,
+        },
         Command::Register | Command::Start => {
             let msg = format!("Your Telegram ID is: {}", message.chat.id);
             bot.send_message(message.chat.id, msg).await?
@@ -48,5 +53,11 @@ async fn answer(bot: Bot, message: Message, command: Command) -> ResponseResult<
 #[tokio::main]
 pub async fn telegram(args: TelegramArgs) {
     let bot = Bot::new(args.token);
-    Command::repl(bot, answer).await;
+    let handler = Update::filter_message()
+        .branch(dptree::entry().filter_command::<Command>().endpoint(answer));
+    Dispatcher::builder(bot, handler)
+        .dependencies(dptree::deps![args.trigger])
+        .build()
+        .dispatch()
+        .await;
 }

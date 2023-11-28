@@ -1,4 +1,5 @@
 [telegram]
+trigger = [ "/usr/bin/labadoor", "open" ]
 token = ""
 
 [matrix]

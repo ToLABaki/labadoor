@@ -24,6 +24,8 @@ pub enum Command {
 #[cfg(feature = "telegram")]
 #[derive(Serialize, Deserialize, Parser, Debug)]
 pub struct Telegram {
+    #[clap(skip)]
+    pub trigger: Option<Vec<String>>,
     #[clap(short, long)]
     pub token: Option<String>,
 }
