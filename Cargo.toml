@@ -6,6 +6,7 @@ members = [
     "labadoor-csv",
     "labadoor",
     "labadoor-auth",
+    "labadoor-common",
     "labadoor-open",
     "labadoor-acl",
 ]
