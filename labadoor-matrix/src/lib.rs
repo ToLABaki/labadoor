@@ -13,24 +13,26 @@ use matrix_sdk::{
 };
 
 pub struct MatrixArgs {
+    pub trigger: Binary,
     pub username: String,
     pub password: String,
     pub device_id: Option<String>,
 }
 
-fn open(param: String) {
-    use std::io::{self, Write};
-    use std::process::Command;
-    let mut cmd = Command::new("/usr/bin/labadoor-wrapper");
-    cmd.arg("matrix").arg(param);
-    let out = cmd.output().expect("Could not run command");
-    io::stdout().write_all(&out.stdout).unwrap();
+fn open(trigger: Vec<String>, param: String) -> BinaryResult {
+    let a = labadoor_common::OpenBinaryArgs {
+        method: "matrix".to_string(),
+        identifier: param,
+        resource_shortcut: 1,
+    };
+    labadoor_common::run_open(a, trigger)
 }
 
 async fn on_room_message(
     event: OriginalSyncMessageLikeEvent<RoomMessageEventContent>,
     room: Room,
     client: Client,
+    bin: Ctx<Binary>,
 ) {
     if let Room::Joined(room) = room {
         let msg_body = match event.content.msgtype {
@@ -42,8 +44,10 @@ async fn on_room_message(
         }
 
         if msg_body == "1" {
-            open(event.sender.to_string());
-            let content = RoomMessageEventContent::text_plain("Open sesame!");
+            let msg = match open(bin.clone(), event.sender.to_string()) {
+                Ok(msg) | Err(msg) => msg,
+            };
+            let content = RoomMessageEventContent::text_plain(msg);
             room.send(content, None).await.unwrap();
         }
         if msg_body == "ping" {
@@ -91,5 +95,6 @@ pub async fn matrix(args: MatrixArgs) {
     client.sync_once(SyncSettings::default()).await.unwrap();
     client.add_event_handler(on_room_message);
     client.add_event_handler(on_room_invite);
+    client.add_event_handler_context(args.trigger);
     client.sync(SyncSettings::default()).await.unwrap();
 }

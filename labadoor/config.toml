@@ -3,6 +3,7 @@ trigger = [ "/usr/bin/labadoor", "open" ]
 token = ""
 
 [matrix]
+trigger = [ "/usr/bin/labadoor", "open" ]
 username = ""
 password = ""
 device_id = ""
