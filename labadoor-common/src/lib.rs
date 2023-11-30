@@ -7,6 +7,13 @@ pub struct OpenBinaryArgs {
     pub resource_shortcut: i8,
 }
 
+pub struct LogBinaryArgs {
+    pub time: String,
+    pub method: String,
+    pub identifier: String,
+    pub resource: String,
+}
+
 pub fn run_bin(bin: Binary) -> BinaryResult {
     use std::{
         io::Read,
@@ -34,5 +41,14 @@ pub fn run_open(args: OpenBinaryArgs, bin: Binary) -> BinaryResult {
     auth_bin.push(args.method.clone());
     auth_bin.push(args.identifier.clone());
     auth_bin.push(args.resource_shortcut.to_string());
+    run_bin(auth_bin)
+}
+
+pub fn run_log(args: LogBinaryArgs, bin: Binary) -> BinaryResult {
+    let mut auth_bin = bin.clone();
+    auth_bin.push(args.time.clone());
+    auth_bin.push(args.method.clone());
+    auth_bin.push(args.identifier.clone());
+    auth_bin.push(args.resource.clone());
     run_bin(auth_bin)
 }
