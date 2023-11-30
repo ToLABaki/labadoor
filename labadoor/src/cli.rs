@@ -17,6 +17,8 @@ pub enum Command {
     GPIO(GPIO),
     #[cfg(feature = "auth")]
     Auth(labadoor_auth::cli::Cli),
+    #[cfg(feature = "log")]
+    Log(labadoor_log::cli::Cli),
     #[cfg(feature = "open")]
     Open(Open),
 }

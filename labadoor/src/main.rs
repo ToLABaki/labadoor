@@ -47,6 +47,8 @@ fn main() -> ExitCode {
             let open = config.get::<cli::Open>("open").unwrap().to_config();
             module_result = labadoor_open::open(open);
         }
+        #[cfg(feature = "log")]
+        cli::Command::Log(cli) => module_result = labadoor_log::log(&cli, config),
         #[cfg(feature = "auth")]
         cli::Command::Auth(cli) => module_result = labadoor_auth::auth(&cli, config),
     }

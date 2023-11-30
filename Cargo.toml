@@ -10,4 +10,5 @@ members = [
     "labadoor-open",
     "labadoor-acl",
     "labadoor-logging",
+    "labadoor-log",
 ]
