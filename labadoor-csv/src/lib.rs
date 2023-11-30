@@ -1,6 +1,7 @@
 use serde::Deserialize;
 
 pub mod acl;
+pub mod logging;
 
 pub struct CSVArgs {
     pub path: String,
