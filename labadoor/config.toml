@@ -14,8 +14,17 @@ pin = 1
 active_low = false
 active_time = 2000
 
+[log]
+backends = ["csv"]
+
+[log.csv]
+path = "./labadoor-csv"
+
 [auth]
 backends = ["csv"]
+
+[auth.csv]
+path = "./labadoor-csv"
 
 [open.auth]
 labadoor = [ "/usr/bin/labadoor", "auth" ]

@@ -22,7 +22,7 @@ pub fn auth(cli: &cli::Cli, config: ConfigBuilder<DefaultState>) -> Result<(), (
     for backend in backends {
         let acl = match backend {
             #[cfg(feature = "csv")]
-            cli::Backend::CSV => config.get::<cli::CSV>("csv").unwrap().to_config().new(),
+            cli::Backend::CSV => config.get::<cli::CSV>("auth.csv").unwrap().to_config().new(),
         };
         match &cli.command {
             cli::Command::Open(cliargs) => {
