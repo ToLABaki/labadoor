@@ -6,6 +6,7 @@ pub type Binary = Vec<String>;
 pub struct OpenArgs {
     pub auth: BTreeMap<String, Binary>,
     pub hardware: BTreeMap<String, Binary>,
+    pub log: Binary,
     pub method: String,
     pub identifier: String,
     pub resource_shortcut: i8,
@@ -36,13 +37,27 @@ fn run_auth(args: &OpenArgs, bin: Binary) -> Result<AuthResult, String> {
     ret
 }
 
+fn run_log(args: &OpenArgs, identifier: String, resource: String) -> Result<String, String> {
+    let a = labadoor_common::LogBinaryArgs {
+        time: "time.now()".to_string(),
+        method: args.method.clone(),
+        identifier: identifier,
+        resource: resource,
+    };
+    labadoor_common::run_log(a, args.log.clone())
+}
+
 pub fn open(args: OpenArgs) -> Result<(), ()> {
     let mut msg = "Not authorized!";
     let mut ret = Err(());
+    let mut identifier = args.identifier.clone();
+    let mut resource = "Null".to_string();
 
     for (method, binary) in args.auth.iter() {
         let output = run_auth(&args, binary.to_vec());
         if let Ok(user) = output {
+            identifier = user.username;
+            resource = user.resource.clone();
             let resource_bin = args.hardware.get(&user.resource).unwrap();
             if let Ok(_) = labadoor_common::run_bin(resource_bin.to_vec()) {
                 msg = "Open sesame!";
@@ -53,5 +68,6 @@ pub fn open(args: OpenArgs) -> Result<(), ()> {
         }
     }
     println!("{}", msg);
+    run_log(&args, identifier, resource).expect("Could not log event");
     ret
 }

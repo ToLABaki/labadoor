@@ -37,6 +37,7 @@ pub fn log(cli: &cli::Cli, config: ConfigBuilder<DefaultState>) -> Result<(), ()
                     cliargs.resource.clone(),
                     cliargs.method.clone(),
                 );
+                ret = Ok(());
             }
         };
     }

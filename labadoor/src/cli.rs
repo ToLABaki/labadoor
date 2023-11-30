@@ -68,6 +68,8 @@ pub struct Open {
     pub auth: BTreeMap<String, Vec<String>>,
     #[clap(skip)]
     pub hardware: BTreeMap<String, Vec<String>>,
+    #[clap(skip)]
+    pub log: Option<Vec<String>>,
     pub method: String,
     pub identifier: String,
     pub resource_shortcut: i8,

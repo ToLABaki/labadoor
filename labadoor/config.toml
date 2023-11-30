@@ -26,6 +26,9 @@ backends = ["csv"]
 [auth.csv]
 path = "./labadoor-csv"
 
+[open]
+log = [ "/usr/bin/labadoor", "log" ]
+
 [open.auth]
 labadoor = [ "/usr/bin/labadoor", "auth" ]
 
