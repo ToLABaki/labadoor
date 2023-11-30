@@ -35,6 +35,8 @@ pub struct Telegram {
 #[cfg(feature = "matrix")]
 #[derive(Serialize, Deserialize, Parser, Debug)]
 pub struct Matrix {
+    #[clap(skip)]
+    pub trigger: Option<Vec<String>>,
     #[clap(short, long)]
     pub username: Option<String>,
     #[clap(short, long)]
@@ -51,10 +53,10 @@ pub struct GPIO {
     #[clap(short, long)]
     pub pin: Option<u8>,
     #[clap(short, long)]
-    #[arg(default_value = "Some(false)")]
+    #[arg(default_value = "false")]
     pub active_low: Option<bool>,
     #[clap(short = 't', long)]
-    #[arg(default_value = "Some(2000)")]
+    #[arg(default_value = "2000")]
     pub active_time: Option<u32>,
 }
 
