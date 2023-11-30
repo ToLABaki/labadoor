@@ -9,4 +9,5 @@ members = [
     "labadoor-common",
     "labadoor-open",
     "labadoor-acl",
+    "labadoor-logging",
 ]
