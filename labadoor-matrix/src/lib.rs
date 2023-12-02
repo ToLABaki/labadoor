@@ -68,9 +68,10 @@ async fn on_room_invite(event: StrippedStateEvent<RoomMemberEventContent>, room:
 
 async fn client_login(username: String, password: String, device_id: Option<String>) -> Client {
     let user = <&UserId>::try_from(username.as_str()).unwrap();
+    let path = "/etc/labadoor/sled_store";
     let client = Client::builder()
         .server_name(user.server_name())
-        .sled_store("./sled_store", None)
+        .sled_store(path, None)
         .unwrap()
         .build()
         .await

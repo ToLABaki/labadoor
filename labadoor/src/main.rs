@@ -24,6 +24,7 @@ fn main() -> ExitCode {
     let module_result: Result<(), ()>;
 
     let cli = cli::parse();
+    let path = "/etc/labadoor/config.toml";
     let config = config::Config::builder()
         .add_source(config::File::with_name(path).required(false))
         .add_source(config::Environment::with_prefix("LABADOOR").separator("_"));
