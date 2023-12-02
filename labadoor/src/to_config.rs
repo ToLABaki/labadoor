@@ -6,6 +6,7 @@ pub trait ToConfig<T> {
 impl ToConfig<labadoor_telegram::TelegramArgs> for crate::cli::Telegram {
     fn to_config(&self) -> labadoor_telegram::TelegramArgs {
         labadoor_telegram::TelegramArgs {
+            trigger: self.trigger.clone().unwrap(),
             token: self.token.clone().unwrap(),
         }
     }
@@ -15,6 +16,7 @@ impl ToConfig<labadoor_telegram::TelegramArgs> for crate::cli::Telegram {
 impl ToConfig<labadoor_matrix::MatrixArgs> for crate::cli::Matrix {
     fn to_config(&self) -> labadoor_matrix::MatrixArgs {
         labadoor_matrix::MatrixArgs {
+            trigger: self.trigger.clone().unwrap(),
             username: self.username.clone().unwrap(),
             password: self.password.clone().unwrap(),
             device_id: self.device_id.clone(),
