@@ -1,4 +1,10 @@
 use clap::Parser;
+#[cfg(any(
+    feature = "telegram",
+    feature = "matrix",
+    feature = "gpio",
+    feature = "open"
+))]
 use serde::{Deserialize, Serialize};
 
 #[derive(Parser, Debug)]
@@ -60,6 +66,7 @@ pub struct GPIO {
     pub active_time: Option<u32>,
 }
 
+#[cfg(feature = "open")]
 use std::collections::BTreeMap;
 #[cfg(feature = "open")]
 #[derive(Serialize, Deserialize, Parser, Clone, Debug)]
