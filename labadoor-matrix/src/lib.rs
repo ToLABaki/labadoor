@@ -1,3 +1,5 @@
+use labadoor_common::{Binary, BinaryResult};
+use matrix_sdk::event_handler::Ctx;
 use matrix_sdk::{
     config::SyncSettings,
     room::Room,
