@@ -1,11 +1,9 @@
-use crate::cli::*;
-
 pub trait ToConfig<T> {
     fn to_config(&self) -> T;
 }
 
 #[cfg(feature = "telegram")]
-impl ToConfig<labadoor_telegram::TelegramArgs> for Telegram {
+impl ToConfig<labadoor_telegram::TelegramArgs> for crate::cli::Telegram {
     fn to_config(&self) -> labadoor_telegram::TelegramArgs {
         labadoor_telegram::TelegramArgs {
             token: self.token.clone().unwrap(),
@@ -14,7 +12,7 @@ impl ToConfig<labadoor_telegram::TelegramArgs> for Telegram {
 }
 
 #[cfg(feature = "matrix")]
-impl ToConfig<labadoor_matrix::MatrixArgs> for Matrix {
+impl ToConfig<labadoor_matrix::MatrixArgs> for crate::cli::Matrix {
     fn to_config(&self) -> labadoor_matrix::MatrixArgs {
         labadoor_matrix::MatrixArgs {
             username: self.username.clone().unwrap(),
@@ -25,7 +23,7 @@ impl ToConfig<labadoor_matrix::MatrixArgs> for Matrix {
 }
 
 #[cfg(feature = "gpio")]
-impl ToConfig<labadoor_gpio::GPIOArgs> for GPIO {
+impl ToConfig<labadoor_gpio::GPIOArgs> for crate::cli::GPIO {
     fn to_config(&self) -> labadoor_gpio::GPIOArgs {
         labadoor_gpio::GPIOArgs {
             device: self.device.clone().unwrap(),
@@ -37,7 +35,7 @@ impl ToConfig<labadoor_gpio::GPIOArgs> for GPIO {
 }
 
 #[cfg(feature = "open")]
-impl ToConfig<labadoor_open::OpenArgs> for Open {
+impl ToConfig<labadoor_open::OpenArgs> for crate::cli::Open {
     fn to_config(&self) -> labadoor_open::OpenArgs {
         labadoor_open::OpenArgs {
             auth: self.auth.clone(),
