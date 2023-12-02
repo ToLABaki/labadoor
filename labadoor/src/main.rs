@@ -1,7 +1,12 @@
 mod cli;
 mod to_config;
-use to_config::ToConfig;
 
+#[cfg(any(
+    feature = "telegram",
+    feature = "matrix",
+    feature = "gpio",
+    feature = "open"
+))]
 macro_rules! add_cliargs {
     ($d:ident,$section:expr,$i:ident) => {
         $d.add_source(config::File::from_str(
@@ -16,7 +21,7 @@ macro_rules! add_cliargs {
 use std::process::ExitCode;
 fn main() -> ExitCode {
     let mut ret = ExitCode::SUCCESS;
-    let mut module_result: Result<(), ()> = Ok(());
+    let module_result: Result<(), ()>;
 
     let cli = cli::parse();
     let config = config::Config::builder()
@@ -25,24 +30,31 @@ fn main() -> ExitCode {
     match &cli.command {
         #[cfg(feature = "telegram")]
         cli::Command::Telegram(cliargs) => {
+            use to_config::ToConfig;
             let config = add_cliargs!(config, "telegram", cliargs);
             let telegram = config.get::<cli::Telegram>("telegram").unwrap().to_config();
             labadoor_telegram::telegram(telegram);
+            module_result = Ok(());
         }
         #[cfg(feature = "matrix")]
         cli::Command::Matrix(cliargs) => {
+            use to_config::ToConfig;
             let config = add_cliargs!(config, "matrix", cliargs);
             let matrix = config.get::<cli::Matrix>("matrix").unwrap().to_config();
             labadoor_matrix::matrix(matrix);
+            module_result = Ok(());
         }
         #[cfg(feature = "gpio")]
         cli::Command::GPIO(cliargs) => {
+            use to_config::ToConfig;
             let config = add_cliargs!(config, "gpio", cliargs);
             let gpio = config.get::<cli::GPIO>("gpio").unwrap().to_config();
             labadoor_gpio::gpio(gpio);
+            module_result = Ok(());
         }
         #[cfg(feature = "open")]
         cli::Command::Open(cliargs) => {
+            use to_config::ToConfig;
             let config = add_cliargs!(config, "open", cliargs);
             let open = config.get::<cli::Open>("open").unwrap().to_config();
             module_result = labadoor_open::open(open);
