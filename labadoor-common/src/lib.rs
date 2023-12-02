@@ -20,13 +20,13 @@ pub fn run_bin(bin: Binary) -> BinaryResult {
         process::{Command, Stdio},
     };
 
-    let mut ret = Err("".to_string());
+    let ret: BinaryResult;
     let mut iter = bin.iter();
     let mut cmd = Command::new(iter.next().unwrap());
     cmd.args(iter);
 
     let mut child = cmd.stdout(Stdio::piped()).spawn().unwrap();
-    let mut success = child.wait().unwrap().success();
+    let success = child.wait().unwrap().success();
 
     let mut s = String::from("");
     child.stdout.unwrap().read_to_string(&mut s).unwrap();

@@ -53,7 +53,7 @@ pub fn open(args: OpenArgs) -> Result<(), ()> {
     let mut identifier = args.identifier.clone();
     let mut resource = "Null".to_string();
 
-    for (method, binary) in args.auth.iter() {
+    for (_, binary) in args.auth.iter() {
         let output = run_auth(&args, binary.to_vec());
         if let Ok(user) = output {
             identifier = user.username;
