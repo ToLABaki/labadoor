@@ -3,17 +3,21 @@ use labadoor_acl::{ACLEntry, AuthMethod, ResourceShortcuts, ACL};
 
 impl ACL for CSV {
     /// ACLEntry
+    #[allow(unused_variables)]
     fn allow_access(&self, user: String, resource: String) {
         todo!();
     }
+    #[allow(unused_variables)]
     fn deny_access(&self, user: Option<String>, resource: Option<String>) {
         todo!();
     }
 
     /// AuthMethod
+    #[allow(unused_variables)]
     fn add_auth_method(&self, user: String, method: String, identifier: String) {
         todo!();
     }
+    #[allow(unused_variables)]
     fn del_auth_method(
         &self,
         user: Option<String>,
@@ -24,9 +28,11 @@ impl ACL for CSV {
     }
 
     /// ResourceShortcuts
+    #[allow(unused_variables)]
     fn add_shortcut(&self, user: String, resource: String, shortcut: i8) {
         todo!();
     }
+    #[allow(unused_variables)]
     fn del_shortcut(&self, user: Option<String>, resource: Option<String>, shortcut: Option<i8>) {
         todo!();
     }
@@ -61,6 +67,6 @@ impl ACL for CSV {
     fn is_allowed(&self, username: String, resource: String) -> Option<()> {
         let needle = ACLEntry { username, resource };
         let res = self.find::<ACLEntry>(needle, "acl_entries.csv");
-        return if let Some(r) = res { Some(()) } else { None };
+        return if let Some(_) = res { Some(()) } else { None };
     }
 }
