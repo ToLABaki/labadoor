@@ -9,6 +9,7 @@ config = "0.13.4"
 labadoor-acl = { path = "../labadoor-acl" }
 labadoor-csv = { path = "../labadoor-csv", optional = true }
 serde = { version = "1.0.193", features = ["derive"] }
+toml = "0.8.8"
 
 [features]
 csv = ["dep:labadoor-csv"]

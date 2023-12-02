@@ -8,6 +8,7 @@ license = "AGPL-3.0-or-later"
 csv = "1.1.6"
 labadoor-acl = { path = "../labadoor-acl", optional = true }
 labadoor-logging = { path = "../labadoor-logging", optional = true }
+serde = { version = "1.0.192", features = ["derive"] }
 
 [features]
 auth = ["dep:labadoor-acl"]
