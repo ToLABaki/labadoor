@@ -6,5 +6,9 @@ license = "AGPL-3.0-or-later"
 
 [dependencies]
 csv = "1.1.6"
-labadoor-acl = { path = "../labadoor-acl" }
-labadoor-logging = { path = "../labadoor-logging" }
+labadoor-acl = { path = "../labadoor-acl", optional = true }
+labadoor-logging = { path = "../labadoor-logging", optional = true }
+
+[features]
+auth = ["dep:labadoor-acl"]
+log = ["dep:labadoor-logging"]

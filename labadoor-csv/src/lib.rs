@@ -1,6 +1,8 @@
 use serde::Deserialize;
 
+#[cfg(feature = "auth")]
 pub mod acl;
+#[cfg(feature = "log")]
 pub mod logging;
 
 pub struct CSVArgs {
